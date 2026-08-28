@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui";
 import { demoCta, primaryNav, site } from "@/lib/site";
@@ -10,14 +10,30 @@ import { demoCta, primaryNav, site } from "@/lib/site";
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
   const [scrolled, setScrolled] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  // Standard dialog behaviour: focus moves into the panel on open and returns
+  // to the control that opened it on close, and Escape dismisses.
+  useEffect(() => {
+    if (!open) return;
+    closeButton.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
   // The bar sits on the dark hero at rest, so it needs no edge there. Once the
@@ -81,6 +97,7 @@ export function SiteHeader() {
               comfortable thumb target, with the label carried by aria-label
               rather than visible text. */}
           <button
+            ref={menuButton}
             type="button"
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
@@ -109,53 +126,94 @@ export function SiteHeader() {
         </div>
       </Container>
 
-      {/* The panel takes the rest of the viewport under the 64px bar, so the
-          menu reads as a screen of its own rather than a dropdown hanging off
-          the header. */}
-      {open && (
+      {/*
+        A floating drawer rather than a dropdown. It stays mounted so it can
+        animate both ways, and `inert` keeps its links out of the tab order and
+        the accessibility tree while it is shut.
+
+        The scrim is deliberately translucent: the page stays legible behind
+        it, which is what makes the panel read as floating over the site rather
+        than replacing it.
+      */}
+      <div
+        aria-hidden={!open}
+        inert={!open}
+        className={`fixed inset-0 z-50 lg:hidden ${
+          open ? "" : "pointer-events-none"
+        }`}
+      >
+        <div
+          onClick={() => setOpen(false)}
+          className={`absolute inset-0 bg-iliac-black/45 backdrop-blur-[2px] transition-opacity duration-300 ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
         <div
           id="primary-nav-panel"
-          className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto border-t border-white/10 bg-iliac-black lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className={`absolute bottom-3 right-3 top-3 flex w-[80%] max-w-[21rem] flex-col overflow-y-auto rounded-panel bg-iliac-black shadow-[0_24px_70px_rgba(0,0,0,0.55)] ring-1 ring-white/10 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            open ? "translate-x-0" : "translate-x-[calc(100%+1.5rem)]"
+          }`}
         >
-          <Container>
-            <nav className="flex flex-col pb-12 pt-4" aria-label="Primary">
-              {primaryNav.map((item) => {
-                const active =
-                  pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={active ? "page" : undefined}
-                    className="flex items-center justify-between border-b border-white/10 py-5 font-jakarta text-h2 font-semibold text-white"
-                  >
-                    <span className={active ? "cyan-rule" : ""}>
-                      {item.label}
-                    </span>
-                    <span aria-hidden="true" className="text-h3 text-white/30">
-                      →
-                    </span>
-                  </Link>
-                );
-              })}
-              <Link
-                href={demoCta.href}
-                onClick={() => setOpen(false)}
-                className="mt-10 rounded-pill bg-iliac-blue px-6 py-4 text-center font-jakarta text-[0.9375rem] font-semibold text-white"
-              >
-                {demoCta.label}
-              </Link>
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-8 text-center text-body text-white/55"
-              >
-                {site.email}
-              </a>
-            </nav>
-          </Container>
+          <div className="flex items-center justify-between px-6 pt-5">
+            <Logo className="text-white" />
+            <button
+              ref={closeButton}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                menuButton.current?.focus();
+              }}
+              aria-label="Close menu"
+              className="-mr-2 flex size-11 items-center justify-center text-white/70 transition-colors hover:text-white"
+            >
+              <span aria-hidden="true" className="relative block size-5">
+                <span className="absolute left-0 top-1/2 block h-0.5 w-5 rotate-45 rounded-full bg-current" />
+                <span className="absolute left-0 top-1/2 block h-0.5 w-5 -rotate-45 rounded-full bg-current" />
+              </span>
+            </button>
+          </div>
+
+          <nav className="flex flex-1 flex-col px-6 pb-8 pt-6" aria-label="Primary">
+            {primaryNav.map((item) => {
+              const active =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className="flex items-center justify-between border-b border-white/10 py-4 font-jakarta text-h2 font-semibold text-white"
+                >
+                  <span className={active ? "cyan-rule" : ""}>{item.label}</span>
+                  <span aria-hidden="true" className="text-h3 text-white/30">
+                    →
+                  </span>
+                </Link>
+              );
+            })}
+
+            <Link
+              href={demoCta.href}
+              onClick={() => setOpen(false)}
+              className="mt-8 rounded-pill bg-iliac-blue px-6 py-4 text-center font-jakarta text-[0.9375rem] font-semibold text-white"
+            >
+              {demoCta.label}
+            </Link>
+
+            <a
+              href={`mailto:${site.email}`}
+              className="mt-auto pt-8 text-center text-body text-white/55"
+            >
+              {site.email}
+            </a>
+          </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }
