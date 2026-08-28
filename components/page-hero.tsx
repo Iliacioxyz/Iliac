@@ -35,28 +35,48 @@ export function PageHero({
 
   return (
     <section className="on-dark relative overflow-hidden bg-iliac-black text-white">
-      {watermark && <NuciWatermark />}
       <Container
         className={`relative ${size === "home" ? "py-20 sm:py-28 lg:py-44" : "py-16 sm:py-24 lg:py-32"}`}
       >
-        {/* The hero plays once on load, in reading order. No observer: it is
-            already on screen, so it should not wait to be scrolled to. */}
-        {eyebrow && (
-          <p className="hero-in hero-in-1 eyebrow text-iliac-cyan">{eyebrow}</p>
-        )}
-        <Headline
-          as="h1"
-          accentWords={accentWords}
-          className={`hero-in hero-in-2 ${eyebrow ? "mt-8" : ""} max-w-[20ch] font-extrabold leading-[1.06] ${scale}`}
+        {/* When the mark is shown it gets a column of its own rather than
+            sitting behind the copy — at this opacity an overlap would put a
+            bright cyan flower under the headline. */}
+        <div
+          className={
+            watermark
+              ? "lg:grid lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-center lg:gap-16 xl:grid-cols-[minmax(0,1fr)_24rem]"
+              : ""
+          }
         >
-          {headline}
-        </Headline>
-        {subheadline && (
-          <p className="hero-in hero-in-3 mt-8 max-w-[52ch] text-h2 font-normal leading-relaxed text-white/70">
-            {subheadline}
-          </p>
-        )}
-        {children && <div className="hero-in hero-in-4">{children}</div>}
+          <div>
+            {/* The hero plays once on load, in reading order. No observer: it
+                is already on screen, so it should not wait to be scrolled to. */}
+            {eyebrow && (
+              <p className="hero-in hero-in-1 eyebrow text-iliac-cyan">
+                {eyebrow}
+              </p>
+            )}
+            <Headline
+              as="h1"
+              accentWords={accentWords}
+              className={`hero-in hero-in-2 ${eyebrow ? "mt-8" : ""} max-w-[20ch] font-extrabold leading-[1.06] ${scale}`}
+            >
+              {headline}
+            </Headline>
+            {subheadline && (
+              <p className="hero-in hero-in-3 mt-8 max-w-[52ch] text-h2 font-normal leading-relaxed text-white/70">
+                {subheadline}
+              </p>
+            )}
+            {children && <div className="hero-in hero-in-4">{children}</div>}
+          </div>
+
+          {watermark && (
+            <div className="hero-in hero-in-4 hidden lg:block">
+              <NuciWatermark intensity="feature" />
+            </div>
+          )}
+        </div>
       </Container>
     </section>
   );
