@@ -218,7 +218,7 @@ function CarouselButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="flex size-11 items-center justify-center rounded-pill border border-iliac-black/15 font-jakarta text-h3 text-near-black transition-colors hover:border-iliac-black hover:bg-iliac-black hover:text-off-white disabled:cursor-not-allowed disabled:border-iliac-black/10 disabled:text-near-black/25 disabled:hover:bg-transparent"
+      className="flex size-11 items-center justify-center rounded-pill border border-iliac-black/15 font-jakarta text-h3 text-near-black transition-colors hover:border-iliac-black hover:bg-iliac-black hover:text-off-white disabled:cursor-not-allowed disabled:border-iliac-black/10 disabled:text-near-black/40 disabled:hover:bg-transparent"
     >
       <span aria-hidden="true">{children}</span>
     </button>
