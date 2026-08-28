@@ -70,7 +70,7 @@ export function CapabilityDiagram() {
           meeting point: drawing it inside the stretched viewBox would skew it,
           and setting it as a text glyph left it floating out of register with
           the curves. */}
-      <div aria-hidden="true" className="relative hidden lg:block">
+      <div aria-hidden="true" className="arrives-last relative hidden lg:block">
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
@@ -111,7 +111,7 @@ export function CapabilityDiagram() {
 
       {/* Where the four arrive: the deck's own phrase for it. On small screens
           the diagram runs vertically, so the arrow turns with it. */}
-      <div className="mt-6 flex items-center gap-4 lg:mt-0 lg:gap-0 lg:pl-6">
+      <div className="arrives-last mt-6 flex items-center gap-4 lg:mt-0 lg:gap-0 lg:pl-6">
         <span
           aria-hidden="true"
           className="font-jakarta text-h2 text-iliac-blue lg:hidden"
