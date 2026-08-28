@@ -1,26 +1,216 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ILIAC design tokens — from the Brand Identity Guidelines.
+   Palette rule: never combine more than three brand colours in one design.
+   This site runs on ILIAC Black + ILIAC Blue + ILIAC Cyan throughout;
+   ILIAC Amber is held back for premium moments (Investors, Partners) and
+   never appears on functional UI. #1A3A6B and #FF6B35 are retired. */
+
+@theme {
+  /* Primary palette */
+  --color-iliac-black: #0a1628;
+  --color-iliac-cyan: #0ec8d4;
+  --color-iliac-blue: #2563eb;
+  --color-iliac-amber: #d4a843;
+
+  /* Supporting palette */
+  --color-off-white: #f7f8fa;
+  --color-light-grey: #e8ecf2;
+  --color-mid-grey: #6b7fa3;
+  --color-near-black: #0a0a0a;
+
+  /* Plus Jakarta Sans carries every heading, label and button.
+     DM Sans carries body copy and captions. */
+  --radius-field: 0.75rem;
+  --radius-card: 1rem;
+  --radius-panel: 1.25rem;
+  --radius-pill: 9999px;
+
+  --font-jakarta: var(--font-plus-jakarta), "Helvetica Neue", Arial, sans-serif;
+  --font-dm: var(--font-dm-sans), "Helvetica Neue", Arial, sans-serif;
+
+  /* The eight-step scale from the guidelines. Display is the one extension:
+     the deck tops out at 48/800, so hero type scales up from there and holds
+     the same weight and face. */
+  --text-display: 3rem; /* 48 · 800 · Plus Jakarta Sans */
+  --text-display--line-height: 1.04;
+  --text-h1: 2rem; /* 32 · 700 · Plus Jakarta Sans */
+  --text-h1--line-height: 1.15;
+  --text-h2: 1.5rem; /* 24 · 600 · Plus Jakarta Sans */
+  --text-h2--line-height: 1.25;
+  --text-h3: 1.25rem; /* 20 · 500 · Plus Jakarta Sans */
+  --text-h3--line-height: 1.35;
+  --text-body: 1rem; /* 16 · 400 · DM Sans */
+  --text-body--line-height: 1.65;
+  --text-label: 0.875rem; /* 14 · 600 · Plus Jakarta Sans */
+  --text-label--line-height: 1.2;
+  --text-caption: 0.75rem; /* 12 · 400 · DM Sans */
+  --text-caption--line-height: 1.5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-off-white);
+    color: var(--color-near-black);
+    font-family: var(--font-dm);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Blue is the interactive colour, so it is also the focus colour. Dark
+     sections swap it for cyan, which clears AA against ILIAC Black at 8.2:1
+     where blue would not. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring, var(--color-iliac-blue));
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-iliac-blue);
+    color: #ffffff;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Applied to any ILIAC Black section so focus rings stay legible on it. */
+@utility on-dark {
+  --focus-ring: var(--color-iliac-cyan);
+}
+
+/* 14 · 600 · Plus Jakarta Sans — section eyebrows, labels, buttons. */
+@utility eyebrow {
+  font-family: var(--font-jakarta);
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 12 · 400 · DM Sans — captions and metadata. */
+@utility caption {
+  font-family: var(--font-dm);
+  font-size: var(--text-caption);
+  line-height: 1.5;
+}
+
+/* The site's one repeated signature: a cyan hairline under the closing words
+   of a headline. Cyan is an accent for borders, underlines and highlights —
+   never a large fill — so this is the whole of its job here.
+   Drawn as a background so its width can be animated; identical at rest to
+   the inset shadow it replaces. */
+@utility cyan-rule {
+  background-image: linear-gradient(
+    var(--color-iliac-cyan),
+    var(--color-iliac-cyan)
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------------------------------------------------------------- motion ---
+   Scroll reveals are driven by CSS view timelines, not an observer. That
+   matters for more than elegance: an element whose reveal depends on
+   IntersectionObserver stays invisible if the observer never fires, and there
+   is no way to recover. Here the hidden state only ever exists inside
+   @supports, so a browser without view timelines simply renders the content.
+
+   Motion is deliberately small — a 16px rise on an enterprise page, not a
+   showreel. */
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rule-in {
+  from {
+    background-size: 0% 0.12em;
+  }
+  to {
+    background-size: 100% 0.12em;
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The hero is on screen at load, so it plays once on a time-based animation
+   rather than waiting to be scrolled to. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in {
+    animation: hero-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-in-1 { animation-delay: 0.05s; }
+  .hero-in-2 { animation-delay: 0.15s; }
+  .hero-in-3 { animation-delay: 0.25s; }
+  .hero-in-4 { animation-delay: 0.35s; }
+
+  /* The signature: the cyan rule strikes in after the words have landed. */
+  .hero-in .cyan-rule {
+    animation: rule-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 24%;
+    }
+
+    .reveal .cyan-rule {
+      animation: rule-in linear both;
+      animation-timeline: view();
+      animation-range: entry 14% cover 34%;
+    }
+
+    /* Grids arrive in sequence rather than as one slab: each child starts a
+       little further into the scroll than the last. */
+    .stagger > * {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+    }
+    .stagger > *:nth-child(1) { animation-range: entry 6% cover 24%; }
+    .stagger > *:nth-child(2) { animation-range: entry 10% cover 28%; }
+    .stagger > *:nth-child(3) { animation-range: entry 14% cover 32%; }
+    .stagger > *:nth-child(4) { animation-range: entry 18% cover 36%; }
+    .stagger > *:nth-child(5) { animation-range: entry 22% cover 40%; }
+  }
 }

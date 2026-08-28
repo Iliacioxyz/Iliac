@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 38" fill="none" role="img" aria-label="ILIAC">
+  <!--
+    Reconstructed from the supplied 140px logo image by sampling its pixels.
+    The mark is four parallelograms sheared 15deg, laid out on an 18/10 block
+    grid with a 2-unit gutter, in exact 180-degree rotational symmetry:
+    large top-left pairs with large bottom-right, small top-right with small
+    bottom-left. Colours are the gradient recovered from the source.
+  -->
+  <defs>
+    <linearGradient id="iliac-mark-gradient" gradientUnits="userSpaceOnUse" x1="4" y1="0" x2="28" y2="38">
+      <stop offset="0" stop-color="#05F7AD"/>
+      <stop offset="1" stop-color="#3DB1FF"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#iliac-mark-gradient)">
+    <path d="M8.04 0H26.04L21.22 18H3.22Z"/>
+    <path d="M25.89 8H35.89L33.22 18H23.22Z"/>
+    <path d="M2.68 20H12.68L10 30H0Z"/>
+    <path d="M14.68 20H32.68L27.86 38H9.86Z"/>
+  </g>
+</svg>
