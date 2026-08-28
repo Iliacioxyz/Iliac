@@ -236,3 +236,19 @@
     }
   }
 }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* A fade-only stagger, for content that drawn connectors point at. The
+       16px rise used elsewhere carries the anchor nodes away from lines that
+       cannot move with them, so mid-reveal a curve appears to miss its node. */
+    .stagger-fade > * {
+      animation: fade-in linear both;
+      animation-timeline: view();
+    }
+    .stagger-fade > *:nth-child(1) { animation-range: entry 6% cover 24%; }
+    .stagger-fade > *:nth-child(2) { animation-range: entry 10% cover 28%; }
+    .stagger-fade > *:nth-child(3) { animation-range: entry 14% cover 32%; }
+    .stagger-fade > *:nth-child(4) { animation-range: entry 18% cover 36%; }
+  }
+}

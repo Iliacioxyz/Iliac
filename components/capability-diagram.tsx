@@ -24,7 +24,7 @@ export function CapabilityDiagram() {
           aria-hidden="true"
           className="absolute bottom-6 left-[7px] top-6 w-px bg-iliac-blue/30 lg:hidden"
         />
-        <ul className="stagger grid grid-cols-1 gap-3 lg:auto-rows-fr">
+        <ul className="stagger-fade grid grid-cols-1 gap-3 lg:auto-rows-fr">
         {capabilities.map((capability) => (
           <li key={capability.id} className="relative pl-8 lg:pl-0">
             {/* Node on the spine, small screens only. */}
@@ -71,28 +71,45 @@ export function CapabilityDiagram() {
           and setting it as a text glyph left it floating out of register with
           the curves. */}
       <div aria-hidden="true" className="arrives-last relative hidden lg:block">
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          fill="none"
-          className="absolute inset-0 h-full w-full"
+        {/*
+          Inset by half a row so the drawing area runs from the first row's
+          centre to the last row's centre. Row centres are then always 0, 1/3,
+          2/3 and 1 of that span — the spacing between them is one row plus one
+          gap every time, so the origins hold at any row height. Percentages of
+          the full column would only be right for one specific height.
+
+          Four equal rows of height h with three 12px gaps: h/2 = (100% - 36px) / 8.
+        */}
+        <div
+          className="absolute inset-x-0"
+          style={{
+            top: "calc((100% - 36px) / 8)",
+            bottom: "calc((100% - 36px) / 8)",
+          }}
         >
-          {[11.57, 37.19, 62.81, 88.43].map((y) => (
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            fill="none"
+            className="absolute inset-0 h-full w-full overflow-visible"
+          >
+            {[0, 100 / 3, 200 / 3, 100].map((y) => (
+              <path
+                key={y}
+                d={`M0 ${y} C 52 ${y}, 42 50, 68 50`}
+                stroke="var(--color-iliac-blue)"
+                strokeWidth="1.25"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
             <path
-              key={y}
-              d={`M0 ${y} C 52 ${y}, 42 50, 68 50`}
+              d="M68 50 H100"
               stroke="var(--color-iliac-blue)"
               strokeWidth="1.25"
               vectorEffect="non-scaling-stroke"
             />
-          ))}
-          <path
-            d="M68 50 H100"
-            stroke="var(--color-iliac-blue)"
-            strokeWidth="1.25"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
+          </svg>
+        </div>
 
         <svg
           viewBox="0 0 10 10"
