@@ -21,6 +21,7 @@ export default function NuciPage() {
   return (
     <>
       <PageHero
+        watermark
         eyebrow="Nuci"
         headline="Technology that resolves, not just responds."
         accentWords={3}
@@ -77,7 +78,7 @@ export default function NuciPage() {
       </Section>
 
       {/* How It Works */}
-      <Section id="how-it-works" tone="dark">
+      <Section id="how-it-works" tone="dark" watermark>
         <Eyebrow tone="dark">How it works</Eyebrow>
         <Headline
           as="h2"
@@ -154,16 +155,16 @@ export default function NuciPage() {
               Businesses that depend on technology to operate.
             </Headline>
             <Body className="mt-8">
-              Nuci is built for businesses that depend on technology to operate
-              , from growing companies without a dedicated IT department to
-              enterprises whose IT teams are drowning in repetitive requests.
+              Nuci is built for businesses that depend on technology to
+              operate, from growing companies without a dedicated IT department
+              to enterprises whose IT teams are drowning in repetitive requests.
             </Body>
           </div>
         </div>
       </Section>
 
       {/* CTA */}
-      <Section tone="dark">
+      <Section tone="dark" watermark>
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <Headline
             as="h2"

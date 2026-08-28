@@ -25,11 +25,14 @@ export function Container({
 export function Section({
   id,
   tone = "light",
+  watermark = false,
   className = "",
   children,
 }: {
   id?: string;
   tone?: "light" | "divided" | "dark";
+  /** Opt in to the Nuci watermark. Only the Nuci page uses it. */
+  watermark?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -44,7 +47,7 @@ export function Section({
       id={id}
       className={`relative overflow-hidden ${grounds[tone]} py-16 sm:py-24 lg:py-40 ${className}`}
     >
-      {tone === "dark" && <NuciWatermark />}
+      {tone === "dark" && watermark && <NuciWatermark />}
       <Container className="relative">
         <div className="reveal">{children}</div>
       </Container>
@@ -53,10 +56,12 @@ export function Section({
 }
 
 /**
- * The Nuci mark, sunk into the dark grounds at low opacity so it reads as
- * texture rather than a logo placement. Decorative only: it carries no
- * meaning, so it is hidden from assistive tech and from small screens, where
- * it would crowd the copy.
+ * The Nuci mark, sunk into a dark ground at low opacity so it reads as texture
+ * rather than a logo placement. It belongs to the product, so it appears only
+ * on the Nuci page — never behind ILIAC's own company copy.
+ *
+ * Decorative only: hidden from assistive tech, and from small screens where it
+ * would crowd the copy.
  */
 export function NuciWatermark({ className = "" }: { className?: string }) {
   return (

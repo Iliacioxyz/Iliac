@@ -16,6 +16,7 @@ export function PageHero({
   accentWords = 1,
   subheadline,
   size = "page",
+  watermark = false,
   children,
 }: {
   eyebrow?: string;
@@ -23,6 +24,8 @@ export function PageHero({
   accentWords?: number;
   subheadline?: string;
   size?: "page" | "home";
+  /** Opt in to the Nuci watermark. Only the Nuci page uses it. */
+  watermark?: boolean;
   children?: ReactNode;
 }) {
   const scale =
@@ -32,7 +35,7 @@ export function PageHero({
 
   return (
     <section className="on-dark relative overflow-hidden bg-iliac-black text-white">
-      <NuciWatermark />
+      {watermark && <NuciWatermark />}
       <Container
         className={`relative ${size === "home" ? "py-20 sm:py-28 lg:py-44" : "py-16 sm:py-24 lg:py-32"}`}
       >
