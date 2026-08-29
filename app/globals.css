@@ -252,3 +252,26 @@
     .stagger-fade > *:nth-child(4) { animation-range: entry 18% cover 36%; }
   }
 }
+
+/* The glow behind the Nuci mark breathes. Only the light moves — the mark
+   itself holds still, so it reads as ambient rather than as a blink. Wrapped
+   in the motion query rather than left to the global reduced-motion override,
+   because an infinite loop is exactly what that preference is asking about:
+   without it the halo simply rests at full strength. */
+@keyframes nuci-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nuci-glow {
+    animation: nuci-glow 7s ease-in-out infinite;
+  }
+}
