@@ -212,10 +212,15 @@ export const partnerships = [
 /* --------------------------------------------------------------- about --- */
 
 export const leadership = [
-  { name: "Mu'az Daud", role: "Founder & Chief Executive Officer" },
+  {
+    name: "Mu'az Daud",
+    role: "Founder & Chief Executive Officer",
+    photo: "/muaz-portrait.webp",
+  },
   {
     name: "Ebuka Okolo",
     role: "Technical Co-Founder & Head of Product Engineering",
+    photo: "/ebuka-portrait.webp",
   },
 ];
 

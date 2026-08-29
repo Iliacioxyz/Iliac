@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { PageHero } from "@/components/page-hero";
 import {
   Body,
   ButtonLink,
   Eyebrow,
   Headline,
-  Rule,
   Section,
 } from "@/components/ui";
 import { demoCta, leadership, site } from "@/lib/site";
@@ -157,29 +157,51 @@ export default function AboutPage() {
         </Body>
       </Section>
 
-      {/* Leadership */}
+      {/* Leadership. Centred rather than left-aligned like the rest: with only
+          two people in the band, a left-aligned block left the right half of
+          the section empty. */}
       <Section tone="dark">
-        <Eyebrow tone="dark">Leadership</Eyebrow>
-        <Headline
-          as="h2"
-          accentWords={2}
-          className="mt-7 text-h1 font-bold text-white"
-        >
-          The people building it.
-        </Headline>
+        <div className="text-center">
+          <Eyebrow tone="dark">Leadership</Eyebrow>
+          <Headline
+            as="h2"
+            accentWords={2}
+            className="mt-7 text-h1 font-bold text-white"
+          >
+            The people building it.
+          </Headline>
+        </div>
 
-        <ul className="mt-14">
-          {leadership.map((person, index) => (
-            <li key={person.name}>
-              {index > 0 && <Rule tone="dark" />}
-              <div className="flex flex-col gap-2 py-8 sm:flex-row sm:items-baseline sm:justify-between sm:gap-10">
-                <p className="font-jakarta text-h1 font-bold text-white">
-                  {person.name}
-                </p>
-                <p className="text-body text-white/60 sm:text-right">
-                  {person.role}
-                </p>
+        {/*
+          The portraits are pre-processed: each subject is cut out of its own
+          studio backdrop and placed on one flat Off White ground, so the two
+          match despite arriving as a warm-white and a grey shot.
+
+          They keep that light ground rather than shipping as transparent
+          cut-outs because both men wear dark navy suits and have black hair —
+          on this dark band a true cut-out loses everything but the face.
+
+          The alt text is empty on purpose: the name follows immediately in the
+          heading, so describing the portrait would just repeat it.
+        */}
+        <ul className="stagger-fade mx-auto mt-16 grid max-w-xl gap-12 sm:grid-cols-2">
+          {leadership.map((person) => (
+            <li key={person.name} className="flex flex-col items-center text-center">
+              <div className="relative size-32 overflow-hidden rounded-full ring-1 ring-white/15 sm:size-36">
+                <Image
+                  src={person.photo}
+                  alt=""
+                  fill
+                  sizes="144px"
+                  className="object-cover"
+                />
               </div>
+              <h3 className="mt-6 font-jakarta text-h2 font-semibold text-white">
+                {person.name}
+              </h3>
+              <p className="mt-2 max-w-[24ch] text-body text-white/60">
+                {person.role}
+              </p>
             </li>
           ))}
         </ul>
