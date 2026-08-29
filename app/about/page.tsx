@@ -173,13 +173,9 @@ export default function AboutPage() {
         </div>
 
         {/*
-          The portraits are pre-processed: each subject is cut out of its own
-          studio backdrop and placed on one flat Off White ground, so the two
-          match despite arriving as a warm-white and a grey shot.
-
-          They keep that light ground rather than shipping as transparent
-          cut-outs because both men wear dark navy suits and have black hair —
-          on this dark band a true cut-out loses everything but the face.
+          The photographs run as shot. Cutting the subjects out of their studio
+          backdrops left edges that would not survive a second look, so the
+          frames stay whole and the circular mask does the tidying.
 
           The alt text is empty on purpose: the name follows immediately in the
           heading, so describing the portrait would just repeat it.
@@ -193,7 +189,7 @@ export default function AboutPage() {
                   alt=""
                   fill
                   sizes="144px"
-                  className="object-cover"
+                  className={`object-cover ${person.focus}`}
                 />
               </div>
               <h3 className="mt-6 font-jakarta text-h2 font-semibold text-white">
