@@ -86,5 +86,5 @@ Website Copy package. Colour and type tokens in `app/globals.css` come from the
 ILIAC Brand Identity Guidelines. Shared components are in `components/ui.tsx`.
 
 Still open: the mark in `public/` is traced rather than master artwork, the
-contact form opens a mail client instead of posting anywhere, and the canonical
+contact form needs `RESEND_API_KEY` and `CONTACT_FROM` set to deliver, and the canonical
 domain is undecided between `iliac.xyz` and `nuci.io`.

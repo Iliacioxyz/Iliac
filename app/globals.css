@@ -13,6 +13,10 @@
   --color-iliac-blue: #2563eb;
   --color-iliac-amber: #d4a843;
 
+  /* Form validation. The brand deck covers brand colour, not system states,
+     so this sits outside the three-colour rule as functional UI. */
+  --color-error: #b3261e;
+
   /* Supporting palette */
   --color-off-white: #f7f8fa;
   --color-light-grey: #e8ecf2;
