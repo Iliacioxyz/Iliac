@@ -211,11 +211,25 @@ export const partnerships = [
 
 /* --------------------------------------------------------------- about --- */
 
+/**
+ * The photographs are used as shot, studio backdrop and all. `focus` sets the
+ * crop anchor: a square avatar has to drop part of each frame, and the two
+ * portraits carry the face at different heights.
+ */
 export const leadership = [
-  { name: "Mu'az Daud", role: "Founder & Chief Executive Officer" },
+  {
+    name: "Mu'az Daud",
+    role: "Founder & Chief Executive Officer",
+    photo: "/muaz.png",
+    // 1341x1173, near square: the full height is kept, so centre is right.
+    focus: "object-center",
+  },
   {
     name: "Ebuka Okolo",
     role: "Technical Co-Founder & Head of Product Engineering",
+    photo: "/ebuka.jpeg",
+    // 810x1080, tall: anchoring to the top keeps the face off the bottom edge.
+    focus: "object-top",
   },
 ];
 

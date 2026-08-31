@@ -214,3 +214,64 @@
     .stagger > *:nth-child(5) { animation-range: entry 22% cover 40%; }
   }
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Connectors arrive after the rows they join. Drawing them at full
+       strength while the last card is still fading made that card's node look
+       detached from its curve. */
+    .arrives-last {
+      animation: fade-in linear both;
+      animation-timeline: view();
+      animation-range: entry 22% cover 44%;
+    }
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* A fade-only stagger, for content that drawn connectors point at. The
+       16px rise used elsewhere carries the anchor nodes away from lines that
+       cannot move with them, so mid-reveal a curve appears to miss its node. */
+    .stagger-fade > * {
+      animation: fade-in linear both;
+      animation-timeline: view();
+    }
+    .stagger-fade > *:nth-child(1) { animation-range: entry 6% cover 24%; }
+    .stagger-fade > *:nth-child(2) { animation-range: entry 10% cover 28%; }
+    .stagger-fade > *:nth-child(3) { animation-range: entry 14% cover 32%; }
+    .stagger-fade > *:nth-child(4) { animation-range: entry 18% cover 36%; }
+  }
+}
+
+/* The glow behind the Nuci mark breathes. Only the light moves — the mark
+   itself holds still, so it reads as ambient rather than as a blink. Wrapped
+   in the motion query rather than left to the global reduced-motion override,
+   because an infinite loop is exactly what that preference is asking about:
+   without it the halo simply rests at full strength. */
+@keyframes nuci-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nuci-glow {
+    animation: nuci-glow 7s ease-in-out infinite;
+  }
+}

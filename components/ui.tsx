@@ -83,7 +83,7 @@ export function NuciWatermark({
         aria-hidden="true"
         className={`pointer-events-none relative block aspect-square w-full ${className}`}
       >
-        <span className="absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgba(14,200,212,0.2),transparent)]" />
+        <span className="nuci-glow absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgba(14,200,212,0.28),transparent)]" />
         <span className="absolute inset-0 bg-[url('/nuci-mark.png')] bg-contain bg-center bg-no-repeat opacity-95" />
       </span>
     );

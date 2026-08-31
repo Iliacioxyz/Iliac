@@ -15,7 +15,7 @@ import { capabilities } from "@/lib/site";
  */
 export function CapabilityDiagram() {
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_7rem_13rem] lg:items-stretch">
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_7rem_16rem] lg:items-stretch">
       {/* The four capabilities. Still real links, still the deck's copy.
           The spine sits outside the list so it is not a .stagger child — it
           would otherwise take the first animation slot and shift every delay. */}
@@ -24,7 +24,7 @@ export function CapabilityDiagram() {
           aria-hidden="true"
           className="absolute bottom-6 left-[7px] top-6 w-px bg-iliac-blue/30 lg:hidden"
         />
-        <ul className="stagger grid grid-cols-1 gap-3 lg:auto-rows-fr">
+        <ul className="stagger-fade grid grid-cols-1 gap-3 lg:auto-rows-fr">
         {capabilities.map((capability) => (
           <li key={capability.id} className="relative pl-8 lg:pl-0">
             {/* Node on the spine, small screens only. */}
@@ -65,36 +65,75 @@ export function CapabilityDiagram() {
         </ul>
       </div>
 
-      {/* The convergence itself. Four rows into one line. */}
-      <div aria-hidden="true" className="relative hidden lg:block">
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          fill="none"
-          className="absolute inset-0 h-full w-full"
+      {/* The convergence itself. Four rows meet, then run on as one line into
+          an arrowhead. The head lives in its own unstretched SVG pinned to the
+          meeting point: drawing it inside the stretched viewBox would skew it,
+          and setting it as a text glyph left it floating out of register with
+          the curves. */}
+      <div aria-hidden="true" className="arrives-last relative hidden lg:block">
+        {/*
+          Inset by half a row so the drawing area runs from the first row's
+          centre to the last row's centre. Row centres are then always 0, 1/3,
+          2/3 and 1 of that span — the spacing between them is one row plus one
+          gap every time, so the origins hold at any row height. Percentages of
+          the full column would only be right for one specific height.
+
+          Four equal rows of height h with three 12px gaps: h/2 = (100% - 36px) / 8.
+        */}
+        <div
+          className="absolute inset-x-0"
+          style={{
+            top: "calc((100% - 36px) / 8)",
+            bottom: "calc((100% - 36px) / 8)",
+          }}
         >
-          {[11.57, 37.19, 62.81, 88.43].map((y) => (
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            fill="none"
+            className="absolute inset-0 h-full w-full overflow-visible"
+          >
+            {[0, 100 / 3, 200 / 3, 100].map((y) => (
+              <path
+                key={y}
+                d={`M0 ${y} C 52 ${y}, 42 50, 68 50`}
+                stroke="var(--color-iliac-blue)"
+                strokeWidth="1.25"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
             <path
-              key={y}
-              d={`M0 ${y} C 55 ${y}, 45 50, 100 50`}
+              d="M68 50 H100"
               stroke="var(--color-iliac-blue)"
               strokeWidth="1.25"
               vectorEffect="non-scaling-stroke"
             />
-          ))}
+          </svg>
+        </div>
+
+        <svg
+          viewBox="0 0 10 10"
+          fill="none"
+          className="absolute right-0 top-1/2 size-2.5 -translate-y-1/2"
+        >
+          <path
+            d="M4.5 1.5 9 5 4.5 8.5"
+            stroke="var(--color-iliac-blue)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </div>
 
-      {/* Where the four arrive: the deck's own phrase for it. The arrow turns
-          with the diagram — down the spine on small screens, along the
-          convergence on wide ones. */}
-      <div className="mt-6 flex items-center gap-4 pl-[2px] lg:mt-0 lg:gap-5 lg:pl-0">
+      {/* Where the four arrive: the deck's own phrase for it. On small screens
+          the diagram runs vertically, so the arrow turns with it. */}
+      <div className="arrives-last mt-6 flex items-center gap-4 lg:mt-0 lg:gap-0 lg:pl-6">
         <span
           aria-hidden="true"
-          className="font-jakarta text-h2 text-iliac-blue lg:-ml-2"
+          className="font-jakarta text-h2 text-iliac-blue lg:hidden"
         >
-          <span className="lg:hidden">↓</span>
-          <span className="hidden lg:inline">→</span>
+          ↓
         </span>
         <p className="font-jakarta text-h3 font-semibold leading-snug text-near-black">
           One continuous effort
