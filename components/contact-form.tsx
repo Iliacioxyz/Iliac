@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { sendContactMessage, type ContactState } from "@/app/actions/contact";
-import { contactPaths, site } from "@/lib/site";
+import { contactPaths } from "@/lib/site";
 
 const field =
   "mt-3 w-full rounded-field border border-iliac-black/15 bg-white px-4 py-3.5 text-body text-near-black placeholder:text-near-black/60 focus:border-iliac-blue disabled:opacity-60";
@@ -119,7 +119,6 @@ export function ContactForm() {
         >
           {pending ? "Sending…" : "Send message"}
         </button>
-        <p className="caption text-near-black/70">Goes to {site.email}</p>
       </div>
 
       {state.status === "error" && state.message && (

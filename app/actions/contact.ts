@@ -84,11 +84,14 @@ export async function sendContactMessage(
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.CONTACT_FROM;
+  // Resend's shared sender works with no domain set up, but only delivers to
+  // the address that owns the Resend account. Fine for testing; a verified
+  // domain is needed before this goes live.
+  const from = process.env.CONTACT_FROM ?? "ILIAC Website <onboarding@resend.dev>";
   const to = process.env.CONTACT_TO ?? site.email;
 
-  if (!apiKey || !from) {
-    console.error("Contact form is not configured: set RESEND_API_KEY and CONTACT_FROM.");
+  if (!apiKey) {
+    console.error("Contact form is not configured: set RESEND_API_KEY.");
     return {
       status: "error",
       message: `We could not send that just now. Please email ${site.email} directly.`,

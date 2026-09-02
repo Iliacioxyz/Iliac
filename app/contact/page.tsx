@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
 import { PageHero } from "@/components/page-hero";
 import { Eyebrow, Headline, Section } from "@/components/ui";
-import { contactPaths, site } from "@/lib/site";
+import { contactPaths } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "Contact ILIAC" },
@@ -20,32 +20,17 @@ export default function ContactPage() {
       />
 
       <Section id="demo" className="scroll-mt-20">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-24">
-          <div>
-            <Eyebrow>Send us a note</Eyebrow>
-            <Headline
-              as="h2"
-              accentWords={2}
-              className="mt-7 max-w-[16ch] text-h1 font-bold"
-            >
-              Start the right conversation.
-            </Headline>
-            <div className="mt-10">
-              <ContactForm />
-            </div>
-          </div>
-
-          <div>
-            <h2 className="eyebrow text-near-black/65">Direct</h2>
-            <a
-              href={`mailto:${site.email}`}
-              className="mt-5 inline-block font-jakarta text-h2 font-semibold text-iliac-blue hover:text-iliac-black"
-            >
-              {site.email}
-            </a>
-            <p className="mt-6 text-body text-near-black/70">
-              {site.location}
-            </p>
+        <div className="max-w-2xl">
+          <Eyebrow>Send us a note</Eyebrow>
+          <Headline
+            as="h2"
+            accentWords={2}
+            className="mt-7 max-w-[16ch] text-h1 font-bold"
+          >
+            Start the right conversation.
+          </Headline>
+          <div className="mt-10">
+            <ContactForm />
           </div>
         </div>
       </Section>
