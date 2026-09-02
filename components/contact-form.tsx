@@ -101,7 +101,7 @@ export function ContactForm() {
           defaultValue={values.message}
           aria-invalid={state.errors?.message ? true : undefined}
           aria-describedby={state.errors?.message ? "message-error" : undefined}
-          className={`${field} resize-y`}
+          className={`${field} resize-none`}
           placeholder="What's slowing the business down, and what would it take to remove it?"
         />
         {state.errors?.message && (
