@@ -2,7 +2,12 @@ import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 /* The page grid. One container width everywhere so sections line up across
-   pages regardless of what they hold. */
+   pages regardless of what they hold.
+
+   90rem rather than 80rem: at 1280 a 1920 monitor was left with 320px of
+   dead margin down each side, which read as the page having been squeezed
+   into the middle. Body copy still caps its own measure at 62ch, so the
+   extra width goes to the multi-column sections that can use it. */
 export function Container({
   className = "",
   children,
@@ -11,7 +16,9 @@ export function Container({
   children: ReactNode;
 }) {
   return (
-    <div className={`mx-auto w-full max-w-[80rem] px-6 lg:px-10 ${className}`}>
+    <div
+      className={`mx-auto w-full max-w-[90rem] px-6 sm:px-8 lg:px-12 ${className}`}
+    >
       {children}
     </div>
   );
@@ -42,10 +49,12 @@ export function Section({
     dark: "on-dark bg-iliac-black text-white",
   };
 
+  // Vertical rhythm: 160px top and bottom put 320px of empty ground between
+  // one section's copy and the next. 112px still reads as a deliberate break.
   return (
     <section
       id={id}
-      className={`relative overflow-hidden ${grounds[tone]} py-16 sm:py-24 lg:py-40 ${className}`}
+      className={`relative overflow-hidden ${grounds[tone]} py-14 sm:py-20 lg:py-28 ${className}`}
     >
       {tone === "dark" && watermark && <NuciWatermark />}
       <Container className="relative">

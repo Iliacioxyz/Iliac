@@ -9,6 +9,11 @@ import { Container, Headline, NuciWatermark } from "@/components/ui";
  * Display sizing is held close to the reference set rather than pushed as far
  * as the viewport allows: OpenAI runs its hero at ~46px, Anthropic at ~58,
  * DeepSeek at ~50. A 76px hero shouts next to any of them.
+ *
+ * Both clamps used to bottom out at 40px and 34px, which is where a phone
+ * always landed, so the floors come down and the ceilings go up a step to
+ * hold their own against the wider container. 60px is still inside the
+ * reference range above.
  */
 export function PageHero({
   eyebrow,
@@ -30,13 +35,13 @@ export function PageHero({
 }) {
   const scale =
     size === "home"
-      ? "text-[clamp(2.5rem,5.5vw,3.5rem)]"
-      : "text-[clamp(2.125rem,4.5vw,3rem)]";
+      ? "text-[clamp(2.125rem,5vw,3.75rem)]"
+      : "text-[clamp(1.875rem,4vw,3.25rem)]";
 
   return (
     <section className="on-dark relative overflow-hidden bg-iliac-black text-white">
       <Container
-        className={`relative ${size === "home" ? "py-20 sm:py-28 lg:py-44" : "py-16 sm:py-24 lg:py-32"}`}
+        className={`relative ${size === "home" ? "py-16 sm:py-24 lg:py-32" : "py-14 sm:py-20 lg:py-24"}`}
       >
         {/* When the mark is shown it gets a column of its own rather than
             sitting behind the copy — at this opacity an overlap would put a
