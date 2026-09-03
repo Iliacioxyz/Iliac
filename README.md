@@ -85,6 +85,35 @@ All site copy lives in `lib/site.ts`, taken verbatim from the approved ILIAC
 Website Copy package. Colour and type tokens in `app/globals.css` come from the
 ILIAC Brand Identity Guidelines. Shared components are in `components/ui.tsx`.
 
-Still open: the mark in `public/` is traced rather than master artwork, the
-contact form opens a mail client instead of posting anywhere, and the canonical
-domain is undecided between `iliac.xyz` and `nuci.io`.
+### Contact form
+
+Enquiries are sent by a server action through Resend. Copy `.env.example` to
+`.env.local` and fill it in:
+
+| Variable | | |
+| --- | --- | --- |
+| `RESEND_API_KEY` | required | From resend.com/api-keys |
+| `CONTACT_TO` | required | Where enquiries land. Without it the code falls back to `site.email`. |
+| `CONTACT_FROM` | optional | Needs a verified domain. See below. |
+
+With `CONTACT_FROM` unset, mail goes out through Resend's shared
+`onboarding@resend.dev`, which needs no DNS but **only delivers to the address
+that owns the Resend account**. Any other recipient returns a 403. That is a
+testing facility: on a shared sandbox domain, enquiries can be spam-filtered
+without you knowing.
+
+Before launch, verify a domain at resend.com/domains and set `CONTACT_FROM` to
+an address on it. The mailbox does not have to exist, it only has to send.
+
+Set the same variables in the Vercel project, for Production, Preview and
+Development. Vercel does not redeploy when they change, so trigger one.
+
+### Still open
+
+- The mark in `public/` is traced from a low-res image rather than master
+  artwork. Swap it in `components/logo.tsx`.
+- `business@iliac.xyz` is advertised in the footer of every page. If that
+  mailbox does not exist, anyone writing to it gets a bounce. Either stand it
+  up or change `site.email`.
+- Canonical domain undecided between `iliac.xyz` and `nuci.io`.
+- Escalation and reporting claims need confirming before production.

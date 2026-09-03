@@ -1,81 +1,76 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { contactPaths, site } from "@/lib/site";
+import { useActionState } from "react";
+import { sendContactMessage, type ContactState } from "@/app/actions/contact";
+import { contactPaths } from "@/lib/site";
 
 const field =
-  "mt-3 w-full rounded-field border border-iliac-black/15 bg-white px-4 py-3.5 text-body text-near-black placeholder:text-near-black/60 focus:border-iliac-blue";
+  "mt-3 w-full rounded-field border border-iliac-black/15 bg-white px-4 py-3.5 text-body text-near-black placeholder:text-near-black/60 focus:border-iliac-blue disabled:opacity-60";
 
 const label = "eyebrow text-near-black/65";
 
+const initial: ContactState = { status: "idle" };
+
 /**
- * There is no backend behind this site yet, so the form composes the enquiry
- * and hands it to the visitor's own mail client. The button says so — a form
- * that silently goes nowhere is worse than no form at all.
+ * Posts to a server action that sends the mail. Nothing opens a mail client,
+ * and the form keeps what was typed if a send fails so nobody has to write it
+ * out twice.
  */
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
+  const [state, action, pending] = useActionState(sendContactMessage, initial);
+  const values = state.values ?? {};
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const subject = String(data.get("subject") ?? "Enquiry");
-    const company = String(data.get("company") ?? "").trim();
-
-    const body = [
-      `Name: ${data.get("name")}`,
-      `Email: ${data.get("email")}`,
-      `Company: ${company}`,
-      `Enquiry type: ${subject}`,
-      "",
-      String(data.get("message") ?? ""),
-    ].join("\n");
-
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
-      company ? `${subject}: ${company}` : subject,
-    )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+  if (state.status === "sent") {
+    return (
+      <div
+        role="status"
+        className="rounded-card bg-white p-8 ring-1 ring-iliac-black/10"
+      >
+        <p className="font-jakarta text-h2 font-semibold text-near-black">
+          Message sent.
+        </p>
+        <p className="mt-3 max-w-[46ch] text-body text-near-black/75">
+          {state.message}
+        </p>
+      </div>
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={action} noValidate className="relative">
+      {/* Bots complete every field they can see. This one is hidden from
+          people and from screen readers; anything in it is discarded. */}
+      <div aria-hidden="true" className="absolute left-[-9999px] h-px w-px overflow-hidden">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <div className="grid gap-6 sm:grid-cols-2">
-        <div>
-          <label htmlFor="name" className={label}>
-            Name
-          </label>
-          <input
-            id="name"
-            name="name"
-            required
-            autoComplete="name"
-            className={field}
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className={label}>
-            Work email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className={field}
-          />
-        </div>
-        <div>
-          <label htmlFor="company" className={label}>
-            Company
-          </label>
-          <input
-            id="company"
-            name="company"
-            autoComplete="organization"
-            className={field}
-          />
-        </div>
+        <Field
+          id="name"
+          label="Name"
+          autoComplete="name"
+          defaultValue={values.name}
+          error={state.errors?.name}
+          disabled={pending}
+        />
+        <Field
+          id="email"
+          label="Work email"
+          type="email"
+          autoComplete="email"
+          defaultValue={values.email}
+          error={state.errors?.email}
+          disabled={pending}
+        />
+        <Field
+          id="company"
+          label="Company"
+          autoComplete="organization"
+          defaultValue={values.company}
+          error={state.errors?.company}
+          disabled={pending}
+        />
         <div>
           <label htmlFor="subject" className={label}>
             What is this about?
@@ -84,7 +79,8 @@ export function ContactForm() {
             id="subject"
             name="subject"
             className={field}
-            defaultValue="Nuci demo request"
+            disabled={pending}
+            defaultValue={values.subject ?? "Nuci demo request"}
           >
             {contactPaths.map((path) => (
               <option key={path.subject}>{path.subject}</option>
@@ -101,31 +97,67 @@ export function ContactForm() {
           id="message"
           name="message"
           rows={5}
-          className={`${field} resize-y`}
+          disabled={pending}
+          defaultValue={values.message}
+          aria-invalid={state.errors?.message ? true : undefined}
+          aria-describedby={state.errors?.message ? "message-error" : undefined}
+          className={`${field} resize-none`}
           placeholder="What's slowing the business down, and what would it take to remove it?"
         />
+        {state.errors?.message && (
+          <p id="message-error" className="caption mt-2 text-error">
+            {state.errors.message}
+          </p>
+        )}
       </div>
 
       <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
         <button
           type="submit"
-          className="rounded-pill bg-iliac-blue px-7 py-4 font-jakarta text-[0.9375rem] font-semibold leading-none text-white transition-colors hover:bg-iliac-black"
+          disabled={pending}
+          className="rounded-pill bg-iliac-blue px-7 py-4 font-jakarta text-[0.9375rem] font-semibold leading-none text-white transition-colors hover:bg-iliac-black disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Open this in my mail app
+          {pending ? "Sending…" : "Send message"}
         </button>
-        <p className="caption text-near-black/70">Goes to {site.email}</p>
       </div>
 
-      <p
-        role="status"
-        className={`caption mt-6 text-iliac-blue transition-opacity duration-300 ${
-          sent ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {sent
-          ? `Your mail app should be open. If not, write to ${site.email}`
-          : " "}
-      </p>
+      {state.status === "error" && state.message && (
+        <p role="alert" className="caption mt-6 text-error">
+          {state.message}
+        </p>
+      )}
     </form>
+  );
+}
+
+function Field({
+  id,
+  label: labelText,
+  error,
+  ...props
+}: {
+  id: string;
+  label: string;
+  error?: string;
+} & React.InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <div>
+      <label htmlFor={id} className={label}>
+        {labelText}
+      </label>
+      <input
+        id={id}
+        name={id}
+        className={field}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        {...props}
+      />
+      {error && (
+        <p id={`${id}-error`} className="caption mt-2 text-error">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }
