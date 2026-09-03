@@ -6,10 +6,10 @@ import { Eyebrow, Headline, Section } from "@/components/ui";
 export const metadata: Metadata = {
   alternates: { canonical: "/solutions" },
   title: {
-    absolute: "Solutions — AI, Enterprise IT, Software & Infrastructure | ILIAC",
+    absolute: "Solutions: AI, Enterprise IT, Software & Cloud | ILIAC",
   },
   description:
-    "ILIAC's core capabilities: AI and intelligent automation, enterprise IT support, business software, and cloud infrastructure, built as one technology platform.",
+    "ILIAC's core capabilities: AI and intelligent automation, enterprise IT, business software and cloud infrastructure, built as one technology platform.",
 };
 
 /**

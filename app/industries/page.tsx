@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/industries" },
   title: { absolute: "Industries We Serve | ILIAC" },
   description:
-    "ILIAC and Nuci support businesses across financial services, healthcare, retail, professional services, and technology, anywhere technical friction slows down real work.",
+    "ILIAC and Nuci support businesses across financial services, healthcare, retail, professional services and technology, wherever technical friction slows work.",
 };
 
 export default function IndustriesPage() {

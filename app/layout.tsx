@@ -23,7 +23,10 @@ export const metadata: Metadata = {
     default: "ILIAC | Intelligent Technology for the Enterprise.",
     template: `%s | ${site.name}`,
   },
-  description: site.description,
+  // oneLine rather than description: both are approved copy, but a search
+  // result truncates around 160 characters and description runs past it.
+  // Social previews allow more, so they keep the fuller sentence below.
+  description: site.oneLine,
   openGraph: {
     type: "website",
     siteName: site.name,
@@ -53,7 +56,9 @@ const organizationSchema = {
   "@type": "Organization",
   name: site.name,
   url: site.url,
-  logo: `${site.url}/iliac-mark.svg`,
+  // The rasterised mark, not the SVG: consumers differ on whether they take
+  // vector logos, and /logo.png is generated from that same file anyway.
+  logo: `${site.url}/logo.png`,
   description: site.description,
   email: site.email,
   slogan: site.tagline,
