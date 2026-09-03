@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { site } from "@/lib/site";
+import { leadership, site } from "@/lib/site";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -39,6 +39,37 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Organization schema. Search engines have no other way to connect the name,
+ * the mark, the Lagos base, the founders and the product into one entity, and
+ * for a company nobody is searching for by name yet that connection is most of
+ * the value. Every claim here is already stated somewhere on the site.
+ *
+ * Deliberately no sameAs: that field takes verified social profile URLs and we
+ * do not have them. An invented one is worse than an absent one.
+ */
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/iliac-mark.svg`,
+  description: site.description,
+  email: site.email,
+  slogan: site.tagline,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lagos",
+    addressCountry: "NG",
+  },
+  founder: leadership.map((person) => ({
+    "@type": "Person",
+    name: person.name,
+    jobTitle: person.role,
+  })),
+  brand: { "@type": "Brand", name: site.product },
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -57,6 +88,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        {/* A "</script>" appearing in the data would close this tag early, so
+            every "<" goes out as its JSON escape. It parses back identically. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema).replaceAll("<", "\\u003c"),
+          }}
+        />
       </body>
     </html>
   );

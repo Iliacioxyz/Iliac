@@ -4,6 +4,7 @@ import { PageHero } from "@/components/page-hero";
 import { Eyebrow, Headline, Section } from "@/components/ui";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/solutions" },
   title: {
     absolute: "Solutions — AI, Enterprise IT, Software & Infrastructure | ILIAC",
   },

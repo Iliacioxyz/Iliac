@@ -10,6 +10,7 @@ import {
 import { partnerships } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/partners" },
   title: { absolute: "Partner With ILIAC" },
   description:
     "ILIAC is building an ecosystem around intelligent enterprise technology. Explore technology, enterprise, implementation, and strategic partnerships.",

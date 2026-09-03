@@ -4,6 +4,7 @@ import { ButtonLink, Headline, Section } from "@/components/ui";
 import { industries } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/industries" },
   title: { absolute: "Industries We Serve | ILIAC" },
   description:
     "ILIAC and Nuci support businesses across financial services, healthcare, retail, professional services, and technology, anywhere technical friction slows down real work.",
