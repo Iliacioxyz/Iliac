@@ -9,6 +9,7 @@ import {
 } from "@/components/ui";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/investors" },
   title: { absolute: "Investors | ILIAC" },
   description:
     "ILIAC is building intelligent enterprise technology from Africa, led by Nuci. Explore the opportunity.",
