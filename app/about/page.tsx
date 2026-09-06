@@ -11,7 +11,8 @@ import {
 import { demoCta, leadership, site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: { absolute: "About ILIAC — Intelligent Technology, Built in Africa" },
+  alternates: { canonical: "/about" },
+  title: { absolute: "About ILIAC | Intelligent Technology, Built in Africa" },
   description:
     "ILIAC is a Lagos-based technology company building intelligent enterprise solutions, led by Nuci, its AI-powered IT support platform.",
 };

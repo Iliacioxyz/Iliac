@@ -5,6 +5,7 @@ import { Eyebrow, Headline, Section } from "@/components/ui";
 import { contactPaths } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: { absolute: "Contact ILIAC" },
   description:
     "Get in touch with ILIAC for general enquiries, business enquiries, Nuci demo requests, partnerships, or investment.",

@@ -12,7 +12,8 @@ import {
 import { demoCta, nuciBenefits } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: { absolute: "Nuci — The Autonomous AI IT Engineer | ILIAC" },
+  alternates: { canonical: "/nuci" },
+  title: { absolute: "Nuci: The Autonomous AI IT Engineer | ILIAC" },
   description:
     "Nuci is ILIAC's AI-powered IT support platform. It diagnoses problems, guides employees to a fix, and escalates to a human specialist when it can't.",
 };

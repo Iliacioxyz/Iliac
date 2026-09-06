@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CapabilityDiagram } from "@/components/capability-diagram";
 import { PageHero } from "@/components/page-hero";
 import {
@@ -21,6 +22,13 @@ import { demoCta, site } from "@/lib/site";
  * faster. People where it matters." — from the deck's own approved tagline
  * list, so the page stays inside sanctioned copy.
  */
+// Title and description are inherited from the root layout. The canonical is
+// set here rather than there because alternates inherit: a layout-level one
+// would make every page that forgot to override it claim to be the homepage.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>
