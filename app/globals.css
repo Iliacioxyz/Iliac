@@ -35,14 +35,24 @@
 
   /* The eight-step scale from the guidelines. Display is the one extension:
      the deck tops out at 48/800, so hero type scales up from there and holds
-     the same weight and face. */
-  --text-display: 3rem; /* 48 · 800 · Plus Jakarta Sans */
+     the same weight and face.
+
+     The deck's numbers are a desktop scale, and they were being served
+     unchanged to phones: a 32px section headline ran to four lines on a
+     390px screen. Each heading step is now fluid, and every clamp reaches
+     the deck's exact value before the layout hits its full width, so
+     desktop stays deck-compliant and only small screens come down.
+
+     Body, label and caption do not scale. 16px body is the floor on any
+     screen, and shrinking it would trade one legibility problem for a
+     worse one. Line heights are ratios, so they follow on their own. */
+  --text-display: clamp(2.25rem, 1.8rem + 2.2vw, 3rem); /* 36 → 48 · 800 */
   --text-display--line-height: 1.04;
-  --text-h1: 2rem; /* 32 · 700 · Plus Jakarta Sans */
+  --text-h1: clamp(1.5rem, 1.15rem + 1.5vw, 2rem); /* 24 → 32 · 700 */
   --text-h1--line-height: 1.15;
-  --text-h2: 1.5rem; /* 24 · 600 · Plus Jakarta Sans */
+  --text-h2: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem); /* 19 → 24 · 600 */
   --text-h2--line-height: 1.25;
-  --text-h3: 1.25rem; /* 20 · 500 · Plus Jakarta Sans */
+  --text-h3: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 17 → 20 · 500 */
   --text-h3--line-height: 1.35;
   --text-body: 1rem; /* 16 · 400 · DM Sans */
   --text-body--line-height: 1.65;
