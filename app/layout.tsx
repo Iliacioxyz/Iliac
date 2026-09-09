@@ -3,7 +3,7 @@ import { DM_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { organizationSchema } from "@/lib/schema";
+import { siteSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -62,7 +62,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
-        <JsonLd schema={organizationSchema} />
+        <JsonLd schema={siteSchema} />
       </body>
     </html>
   );

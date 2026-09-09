@@ -22,6 +22,7 @@ import { leadership, site } from "@/lib/site";
 
 /** Stable entity URIs. Fragments, so they never collide with a real route. */
 export const ORGANIZATION_ID = `${site.url}/#organization`;
+export const WEBSITE_ID = `${site.url}/#website`;
 export const NUCI_ID = `${site.url}/#nuci`;
 
 /**
@@ -39,8 +40,7 @@ export const nuciDescription =
  * also the single field that would most help tie these entities to the wider
  * web, so it is worth filling the moment the profiles exist.
  */
-export const organizationSchema = {
-  "@context": "https://schema.org",
+const organizationNode = {
   "@type": "Organization",
   "@id": ORGANIZATION_ID,
   name: site.name,
@@ -56,13 +56,48 @@ export const organizationSchema = {
     addressLocality: "Lagos",
     addressCountry: "NG",
   },
+  // Founders as addressable people, not anonymous inline blobs. A company's
+  // founders are a real search vector early on, and a knowledge panel wants
+  // them as entities. worksFor points back, so the link reads both ways like
+  // the company-to-product one.
   founder: leadership.map((person) => ({
     "@type": "Person",
+    "@id": `${site.url}/#${person.slug}`,
     name: person.name,
     jobTitle: person.role,
+    worksFor: { "@id": ORGANIZATION_ID },
   })),
   // The forward half of the relationship: the company owns the product.
   owns: { "@id": NUCI_ID },
+};
+
+/**
+ * The site as its own entity, distinct from the company that publishes it.
+ *
+ * This is the node Google reads to decide the site name it prints above a
+ * result, so without it results are liable to show the bare domain instead of
+ * ILIAC. It also gives the domain something to be: the company is an
+ * organisation, the site is a thing the organisation publishes.
+ *
+ * No alternateName. It takes names the site is genuinely also known by, and
+ * there are none yet that are not guesses.
+ */
+const websiteNode = {
+  "@type": "WebSite",
+  "@id": WEBSITE_ID,
+  name: site.name,
+  url: site.url,
+  inLanguage: "en",
+  publisher: { "@id": ORGANIZATION_ID },
+};
+
+/**
+ * Both site-wide nodes in one graph. A single script tag with @graph is
+ * equivalent to two separate ones and keeps the related entities together.
+ */
+export const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [organizationNode, websiteNode],
 };
 
 /**

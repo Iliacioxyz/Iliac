@@ -216,8 +216,14 @@ export const partnerships = [
  * crop anchor: a square avatar has to drop part of each frame, and the two
  * portraits carry the face at different heights.
  */
+/**
+ * `slug` is not copy. It is the stable fragment each founder's entity URI is
+ * built from, so it must not change once the pages are indexed. Derived slugs
+ * were the alternative and they break on the apostrophe in Mu'az.
+ */
 export const leadership = [
   {
+    slug: "muaz-daud",
     name: "Mu'az Daud",
     role: "Founder & Chief Executive Officer",
     photo: "/muaz.png",
@@ -225,6 +231,7 @@ export const leadership = [
     focus: "object-center",
   },
   {
+    slug: "ebuka-okolo",
     name: "Ebuka Okolo",
     role: "Technical Co-Founder & Head of Product Engineering",
     photo: "/ebuka.jpeg",
