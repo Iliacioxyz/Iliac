@@ -40,6 +40,16 @@ export const secondaryNav = [
   { href: "/investors", label: "Investors" },
 ] as const;
 
+/**
+ * Footer only. Legal pages are reachable from every page but stay out of the
+ * primary and secondary navigation, which is where people look for the
+ * proposition rather than the small print.
+ */
+export const legalNav = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
+] as const;
+
 export const demoCta = {
   href: "/contact#demo",
   label: "Request a Nuci Demo",

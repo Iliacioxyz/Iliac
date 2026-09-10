@@ -10,6 +10,8 @@ const routes = [
   "/partners",
   "/investors",
   "/contact",
+  "/privacy",
+  "/terms",
 ];
 
 /**
