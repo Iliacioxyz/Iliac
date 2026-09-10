@@ -115,5 +115,23 @@ Development. Vercel does not redeploy when they change, so trigger one.
 - `business@iliac.xyz` is advertised in the footer of every page. If that
   mailbox does not exist, anyone writing to it gets a bounce. Either stand it
   up or change `site.email`.
-- Canonical domain undecided between `iliac.xyz` and `nuci.io`.
+- `nuci.io` is registered but not wired up. It should 301 to `iliac.xyz`
+  rather than serve a second site: two sites for one company split the search
+  authority you are trying to build.
 - Escalation and reporting claims need confirming before production.
+
+### Search
+
+`iliac.xyz` is canonical, set once in `lib/site.ts` and derived everywhere:
+sitemap, canonicals, `metadataBase`, the social card, and the entity `@id`s in
+`lib/schema.ts`. Changing it after the site is indexed would orphan every one
+of those identities.
+
+`lib/schema.ts` states the company, the site, the founders and Nuci as linked
+entities. The one field deliberately left empty is `sameAs`, which takes
+verified social profile URLs. It is the strongest available signal tying these
+entities to the wider web, so fill it as soon as the profiles exist.
+
+Search Console is verified. What is left is not in this repo: external
+corroboration (LinkedIn, Crunchbase, press) and content that answers questions
+people actually search for.

@@ -8,8 +8,11 @@
 export const site = {
   name: "ILIAC",
   product: "Nuci",
-  // The copy package flags iliac.xyz vs nuci.io as unresolved; iliac.xyz is
-  // the address given under Contact, so it is canonical here for now.
+  // Canonical, decided 2026-09-10. The copy package had left iliac.xyz vs
+  // nuci.io open. Everything derives from this one value: sitemap, canonicals,
+  // metadataBase, the social card and every entity @id in lib/schema.ts, so
+  // changing it after indexing would orphan those identities. nuci.io is held
+  // as a brand asset and should 301 here rather than serve a second site.
   url: "https://iliac.xyz",
   email: "business@iliac.xyz",
   location: "Lagos, Nigeria",
