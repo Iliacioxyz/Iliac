@@ -69,6 +69,54 @@ const organizationNode = {
   })),
   // The forward half of the relationship: the company owns the product.
   owns: { "@id": NUCI_ID },
+  // Topics the company can be associated with. Drawn from the four
+  // capabilities the site actually describes, not a keyword list.
+  knowsAbout: [
+    "IT support",
+    "Artificial intelligence",
+    "Enterprise technology",
+    "Business software",
+    "Cloud infrastructure",
+  ],
+};
+
+/** Where the founders are presented. Their entity URL, since they have no pages of their own. */
+export const LEADERSHIP_URL = `${site.url}/about#leadership`;
+
+/**
+ * The About page, typed as what it is.
+ *
+ * AboutPage with mainEntity pointing at the organisation tells a crawler that
+ * this page is the authoritative source about ILIAC, rather than one more page
+ * that mentions it. The founders are restated here in full: the site-wide
+ * graph carries them with a name and title, and this adds the portrait and a
+ * URL, under the same @id so the nodes merge rather than duplicate.
+ *
+ * Portrait URLs are the originals in public/, not next/image variants: the
+ * optimiser's URLs are not stable identifiers, and a knowledge panel wants the
+ * high-resolution source anyway.
+ */
+export const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${site.url}/about#page`,
+      url: `${site.url}/about`,
+      name: `About ${site.name}`,
+      mainEntity: { "@id": ORGANIZATION_ID },
+      isPartOf: { "@id": WEBSITE_ID },
+    },
+    ...leadership.map((person) => ({
+      "@type": "Person",
+      "@id": `${site.url}/#${person.slug}`,
+      name: person.name,
+      jobTitle: person.role,
+      image: `${site.url}${person.photo}`,
+      url: LEADERSHIP_URL,
+      worksFor: { "@id": ORGANIZATION_ID },
+    })),
+  ],
 };
 
 /**
