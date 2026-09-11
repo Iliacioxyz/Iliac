@@ -233,12 +233,18 @@ export const partnerships = [
  * `slug` is not copy. It is the stable fragment each founder's entity URI is
  * built from, so it must not change once the pages are indexed. Derived slugs
  * were the alternative and they break on the apostrophe in Mu'az.
+ *
+ * `linkedin` feeds sameAs in lib/schema.ts: the claim that this person is the
+ * same entity as that profile. Stored as the bare public URL. The links were
+ * supplied with utm_ tracking parameters on the end, which would have made
+ * the identity claim point at a URL nobody else on the web uses.
  */
 export const leadership = [
   {
     slug: "muaz-daud",
     name: "Mu'az Daud",
     role: "Founder & Chief Executive Officer",
+    linkedin: "https://www.linkedin.com/in/mu-az-daud-398777229",
     photo: "/muaz.png",
     // 1341x1173, near square: the full height is kept, so centre is right.
     focus: "object-center",
@@ -247,6 +253,7 @@ export const leadership = [
     slug: "ebuka-okolo",
     name: "Ebuka Okolo",
     role: "Technical Co-Founder & Head of Product Engineering",
+    linkedin: "https://www.linkedin.com/in/ebuka-okolo-2022b0380",
     photo: "/ebuka.jpeg",
     // 810x1080, tall: anchoring to the top keeps the face off the bottom edge.
     focus: "object-top",
