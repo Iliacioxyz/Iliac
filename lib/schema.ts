@@ -35,10 +35,13 @@ export const nuciDescription =
 /**
  * Every claim here is already stated somewhere on the site.
  *
- * Deliberately no sameAs: that field takes verified social profile URLs and
- * we do not have them. An invented one is worse than an absent one, and it is
- * also the single field that would most help tie these entities to the wider
- * web, so it is worth filling the moment the profiles exist.
+ * The founders carry sameAs pointing at their LinkedIn profiles: the claim
+ * that the person named here is the same entity as that profile. It is the
+ * field a search engine uses to reconcile a name on one site with an identity
+ * it already knows, and LinkedIn is the source it trusts most for who holds
+ * what role where. The organisation itself has no sameAs yet: it takes a
+ * company page, and none has been supplied. An invented one is worse than
+ * an absent one.
  */
 const organizationNode = {
   "@type": "Organization",
@@ -65,10 +68,60 @@ const organizationNode = {
     "@id": `${site.url}/#${person.slug}`,
     name: person.name,
     jobTitle: person.role,
+    sameAs: [person.linkedin],
     worksFor: { "@id": ORGANIZATION_ID },
   })),
   // The forward half of the relationship: the company owns the product.
   owns: { "@id": NUCI_ID },
+  // Topics the company can be associated with. Drawn from the four
+  // capabilities the site actually describes, not a keyword list.
+  knowsAbout: [
+    "IT support",
+    "Artificial intelligence",
+    "Enterprise technology",
+    "Business software",
+    "Cloud infrastructure",
+  ],
+};
+
+/** Where the founders are presented. Their entity URL, since they have no pages of their own. */
+export const LEADERSHIP_URL = `${site.url}/about#leadership`;
+
+/**
+ * The About page, typed as what it is.
+ *
+ * AboutPage with mainEntity pointing at the organisation tells a crawler that
+ * this page is the authoritative source about ILIAC, rather than one more page
+ * that mentions it. The founders are restated here in full: the site-wide
+ * graph carries them with a name and title, and this adds the portrait and a
+ * URL, under the same @id so the nodes merge rather than duplicate.
+ *
+ * Portrait URLs are the originals in public/, not next/image variants: the
+ * optimiser's URLs are not stable identifiers, and a knowledge panel wants the
+ * high-resolution source anyway.
+ */
+export const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${site.url}/about#page`,
+      url: `${site.url}/about`,
+      name: `About ${site.name}`,
+      mainEntity: { "@id": ORGANIZATION_ID },
+      isPartOf: { "@id": WEBSITE_ID },
+    },
+    ...leadership.map((person) => ({
+      "@type": "Person",
+      "@id": `${site.url}/#${person.slug}`,
+      name: person.name,
+      jobTitle: person.role,
+      image: `${site.url}${person.photo}`,
+      url: LEADERSHIP_URL,
+      sameAs: [person.linkedin],
+      worksFor: { "@id": ORGANIZATION_ID },
+    })),
+  ],
 };
 
 /**

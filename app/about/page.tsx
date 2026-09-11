@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import {
   Body,
@@ -8,18 +9,22 @@ import {
   Headline,
   Section,
 } from "@/components/ui";
+import { aboutPageSchema } from "@/lib/schema";
 import { demoCta, leadership, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
   title: { absolute: "About ILIAC | Intelligent Technology, Built in Africa" },
+  // Names the founders and the mission, which the generic one-liner does not:
+  // this is the page a search for either should land on.
   description:
-    "ILIAC is a Lagos-based technology company building intelligent enterprise solutions, led by Nuci, its AI-powered IT support platform.",
+    "ILIAC is a Lagos technology company founded by Mu'az Daud and Ebuka Okolo, building Nuci, an AI-powered IT support platform, to a global standard.",
 };
 
 export default function AboutPage() {
   return (
     <>
+      <JsonLd schema={aboutPageSchema} />
       <PageHero
         eyebrow="About"
         headline="About ILIAC"
@@ -161,7 +166,9 @@ export default function AboutPage() {
       {/* Leadership. Centred rather than left-aligned like the rest: with only
           two people in the band, a left-aligned block left the right half of
           the section empty. */}
-      <Section tone="dark">
+      {/* The id is the founders' entity URL in lib/schema.ts, so it must not
+          change once indexed. */}
+      <Section id="leadership" tone="dark" className="scroll-mt-20">
         <div className="text-center">
           <Eyebrow tone="dark">Leadership</Eyebrow>
           <Headline
@@ -178,8 +185,11 @@ export default function AboutPage() {
           backdrops left edges that would not survive a second look, so the
           frames stay whole and the circular mask does the tidying.
 
-          The alt text is empty on purpose: the name follows immediately in the
-          heading, so describing the portrait would just repeat it.
+          The alt text names the person. It used to be empty because the name
+          follows in the heading, which is the tidier choice for a screen
+          reader, but an unnamed portrait is invisible to image search and to
+          the entity a crawler is trying to build. The small redundancy is the
+          price of the founders being findable by face.
         */}
         <ul className="stagger-fade mx-auto mt-16 grid max-w-xl gap-12 sm:grid-cols-2">
           {leadership.map((person) => (
@@ -187,7 +197,7 @@ export default function AboutPage() {
               <div className="relative size-32 overflow-hidden rounded-full ring-1 ring-white/15 sm:size-36">
                 <Image
                   src={person.photo}
-                  alt=""
+                  alt={`${person.name}, ${person.role} at ${site.name}`}
                   fill
                   sizes="144px"
                   className={`object-cover ${person.focus}`}
