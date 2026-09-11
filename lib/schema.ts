@@ -35,10 +35,13 @@ export const nuciDescription =
 /**
  * Every claim here is already stated somewhere on the site.
  *
- * Deliberately no sameAs: that field takes verified social profile URLs and
- * we do not have them. An invented one is worse than an absent one, and it is
- * also the single field that would most help tie these entities to the wider
- * web, so it is worth filling the moment the profiles exist.
+ * The founders carry sameAs pointing at their LinkedIn profiles: the claim
+ * that the person named here is the same entity as that profile. It is the
+ * field a search engine uses to reconcile a name on one site with an identity
+ * it already knows, and LinkedIn is the source it trusts most for who holds
+ * what role where. The organisation itself has no sameAs yet: it takes a
+ * company page, and none has been supplied. An invented one is worse than
+ * an absent one.
  */
 const organizationNode = {
   "@type": "Organization",
@@ -65,6 +68,7 @@ const organizationNode = {
     "@id": `${site.url}/#${person.slug}`,
     name: person.name,
     jobTitle: person.role,
+    sameAs: [person.linkedin],
     worksFor: { "@id": ORGANIZATION_ID },
   })),
   // The forward half of the relationship: the company owns the product.
@@ -114,6 +118,7 @@ export const aboutPageSchema = {
       jobTitle: person.role,
       image: `${site.url}${person.photo}`,
       url: LEADERSHIP_URL,
+      sameAs: [person.linkedin],
       worksFor: { "@id": ORGANIZATION_ID },
     })),
   ],
