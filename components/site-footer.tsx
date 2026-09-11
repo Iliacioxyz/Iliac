@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Container, Rule } from "@/components/ui";
-import { primaryNav, secondaryNav, site } from "@/lib/site";
+import { legalNav, primaryNav, secondaryNav, site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -68,11 +68,22 @@ export function SiteFooter() {
 
         <Rule tone="dark" className="mt-16" />
 
-        <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="caption text-white/60">
             © {site.year} {site.name}. All rights reserved.
           </p>
-          <p className="caption text-white/60">{site.location}</p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {legalNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="caption text-white/60 transition-colors hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <span className="caption text-white/60">{site.location}</span>
+          </div>
         </div>
       </Container>
     </footer>

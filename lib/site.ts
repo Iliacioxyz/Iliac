@@ -8,8 +8,11 @@
 export const site = {
   name: "ILIAC",
   product: "Nuci",
-  // The copy package flags iliac.xyz vs nuci.io as unresolved; iliac.xyz is
-  // the address given under Contact, so it is canonical here for now.
+  // Canonical, decided 2026-09-10. The copy package had left iliac.xyz vs
+  // nuci.io open. Everything derives from this one value: sitemap, canonicals,
+  // metadataBase, the social card and every entity @id in lib/schema.ts, so
+  // changing it after indexing would orphan those identities. nuci.io is held
+  // as a brand asset and should 301 here rather than serve a second site.
   url: "https://iliac.xyz",
   email: "business@iliac.xyz",
   location: "Lagos, Nigeria",
@@ -35,6 +38,16 @@ export const primaryNav = [
 export const secondaryNav = [
   { href: "/industries", label: "Industries" },
   { href: "/investors", label: "Investors" },
+] as const;
+
+/**
+ * Footer only. Legal pages are reachable from every page but stay out of the
+ * primary and secondary navigation, which is where people look for the
+ * proposition rather than the small print.
+ */
+export const legalNav = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
 ] as const;
 
 export const demoCta = {
@@ -216,8 +229,14 @@ export const partnerships = [
  * crop anchor: a square avatar has to drop part of each frame, and the two
  * portraits carry the face at different heights.
  */
+/**
+ * `slug` is not copy. It is the stable fragment each founder's entity URI is
+ * built from, so it must not change once the pages are indexed. Derived slugs
+ * were the alternative and they break on the apostrophe in Mu'az.
+ */
 export const leadership = [
   {
+    slug: "muaz-daud",
     name: "Mu'az Daud",
     role: "Founder & Chief Executive Officer",
     photo: "/muaz.png",
@@ -225,6 +244,7 @@ export const leadership = [
     focus: "object-center",
   },
   {
+    slug: "ebuka-okolo",
     name: "Ebuka Okolo",
     role: "Technical Co-Founder & Head of Product Engineering",
     photo: "/ebuka.jpeg",

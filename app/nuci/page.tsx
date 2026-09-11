@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { MechanismStrip } from "@/components/mechanism-strip";
 import { PageHero } from "@/components/page-hero";
 import {
@@ -9,18 +10,21 @@ import {
   Rule,
   Section,
 } from "@/components/ui";
+import { nuciDescription, nuciSchema } from "@/lib/schema";
 import { demoCta, nuciBenefits } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/nuci" },
   title: { absolute: "Nuci: The Autonomous AI IT Engineer | ILIAC" },
-  description:
-    "Nuci is ILIAC's AI-powered IT support platform. It diagnoses problems, guides employees to a fix, and escalates to a human specialist when it can't.",
+  description: nuciDescription,
 };
 
 export default function NuciPage() {
   return (
     <>
+      {/* The layout already emits ILIAC on every page, so both entities and
+          the link between them land together here. */}
+      <JsonLd schema={nuciSchema} />
       <PageHero
         watermark
         eyebrow="Nuci"
